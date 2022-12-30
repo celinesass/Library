@@ -43,28 +43,29 @@
       }
 
       const variant = `
-      #include <stdlib.h>
-      #include <string.h>
-      #include <stdio.h>
+      package main
 
-      void test(void)
-      {
-          printf("Run test");
-          exit(100);
+      import (
+          "fmt"
+          "os"
+      )
+
+      func test() {
+          fmt.Println("Run test")
+          os.Exit(100)
       }
 
-      void clean(void)
-      {
-          printf("Clean up");
-          exit(100);
+      func clean() {
+          fmt.Println("Clean up")
+          os.Exit(100)
       }
 
-      int main(int argc, char *argv[])
-      {
-          if (argc > 1) {
-              clean();
+      func main() {
+          args := os.Args[1:]
+          if len(args) > 0 {
+              clean()
           } else {
-              test();
+              test()
           }
       }`;
 
