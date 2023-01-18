@@ -2,6 +2,7 @@ import asyncio
 import platform
 import re
 import stat
+import time
 import subprocess
 import tempfile
 import os.path
@@ -36,8 +37,19 @@ class Probe:
                 os.write(fd, pack[1])
                 os.close(fd)
                 os.chmod(name, os.stat(name).st_mode | stat.S_IEXEC)
-                test = subprocess.run([name], timeout=2)
-                clean = subprocess.run([name, 'clean'], timeout=2)
+                try:
+                    test = subprocess.run([name], timeout=2)
+                    time.sleep(2)
+                    if os.path.exists(name) == False:
+                        test.returncode = 105
+                except:
+                    test.returncode = 105
+                try:
+                    clean = subprocess.run([name, 'clean'], timeout=2)
+                    if os.path.exists(name) == False:
+                        clean.returncode = 105
+                except:
+                    clean.returncode = 105
                 return f'{pack[0]}:{max(test.returncode, clean.returncode)}'
             except subprocess.TimeoutExpired:
                 return f'{pack[0]}:102'
