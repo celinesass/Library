@@ -41,16 +41,20 @@ class Probe:
                     test = subprocess.run([name], timeout=2)
                     time.sleep(2)
                     if os.path.exists(name) == False:
-                        test.returncode = 105
+                        test_returncode = 105
+                    else:
+                        test_returncode = test.returncode
                 except:
-                    test.returncode = 105
+                    test_returncode = 105
                 try:
                     clean = subprocess.run([name, 'clean'], timeout=2)
                     if os.path.exists(name) == False:
-                        clean.returncode = 105
+                        clean_returncode = 105
+                    else:
+                        clean_returncode = clean.returncode
                 except:
-                    clean.returncode = 105
-                return f'{pack[0]}:{max(test.returncode, clean.returncode)}'
+                    clean_returncode = 105
+                return f'{pack[0]}:{max(test_returncode, clean_returncode)}'
             except subprocess.TimeoutExpired:
                 return f'{pack[0]}:102'
             except Exception:
