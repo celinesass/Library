@@ -102,3 +102,12 @@ class DetectController:
         if res.status_code == 200:
             return res.json()
         raise Exception(res.text)
+
+    @verify_credentials
+    def make_decision(self, dhash: str, state: int):
+        """ Save a decision hash """
+        params = dict(dhash=dhash, state=state)
+        res = requests.post(f'{self.account.hq}/detect/decide', headers=self.account.headers, json=params)
+        if res.status_code == 200:
+            return res.text
+        raise Exception(res.text)

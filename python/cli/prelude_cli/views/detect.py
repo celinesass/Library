@@ -131,6 +131,16 @@ def social_statistics(controller, test, days):
     print_json(data=stats)
 
 
+@detect.command('decide')
+@click.argument('dhash')
+@click.option('--state', help='set state', default=1, type=click.Choice([1, 2]))
+@click.pass_obj
+@handle_api_error
+def decide(controller, dhash, state):
+    """ Add a new decision """
+    controller.make_decision(dhash=dhash, state=state)
+
+
 @detect.command('activity')
 @click.option('--days', help='days to look back', default=7, type=int)
 @click.option('--view',
